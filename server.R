@@ -14,7 +14,7 @@ shinyServer( function(input, output, session) {
   carreiras_populosas = servidores %>% select(CARGO) %>% group_by(CARGO) %>% summarise(n=n()) %>% 
                 arrange(desc(n)) %>% slice(1:20) %>% select(CARGO) %>% as.matrix() %>% c()
   carreiras_bempagas = servidores %>% group_by(CARGO) %>% summarise(n=mean(REMUNERACAO)) %>% 
-    arrange(desc(n)) %>% slice(1:20) %>% select(CARGO) %>% as.matrix() %>% c()
+                arrange(desc(n)) %>% slice(1:20) %>% select(CARGO) %>% as.matrix() %>% c()
   
   ####################################SUMARIO###########################################    
   carreiras_grandes = reactive({servidores %>% group_by(CARGO) %>% summarise(N=n()) %>% 
@@ -140,21 +140,22 @@ shinyServer( function(input, output, session) {
   
   ####################################Servidores########################################### 
   
-  name = reactive({input$servidor_input})
+  name = reactive({input$datatab_servidor_rows_current})
+  nome = reactive({
+    if(length(name()) == 1) servidores %>% slice(as.integer(name())) %>% select(NOME) %>% as.matrix() %>% c() else 1
+    })
+  
+  output$texto = renderText({paste("Nome: ", nome())})
   
   output$tab_resumo <- DT::renderDataTable({
-    if(is.null(input$servidor_input))
-      return()
-    serv = servidores %>% filter(NOME == name()) 
-    serv_remuneracao = serv %>% select(REMUNERACAO)
-    serv_cargo = serv %>% select(CARGO)
+    serv_remuneracao = servidores %>% filter(NOME %in% nome()) %>% select(REMUNERACAO)
+    serv_cargo = servidores %>% filter(NOME %in% nome()) %>% select(CARGO)
     remun_cargo = servidores %>% filter(CARGO == serv_cargo[1,]) %>% summarise(Num_Serv = n(), Media = round(mean(REMUNERACAO),2), Min = min(REMUNERACAO), Max = max(REMUNERACAO))
-    #rank = servidores %>% filter(CARGO == serv_cargo[1,]) %>% mutate(Rank = rank(REMUNERACAO,ties.method = "average")) %>% arrange(desc(Rank))
     num_serv_carg = servidores %>% filter(CARGO == serv_cargo[1,]) %>% summarise(N_Servidores_carreira = n())
     num_serv_acima = servidores %>% filter(CARGO == serv_cargo[1,] & REMUNERACAO > serv_remuneracao[1,]) %>% summarise(N_Servidores_Acima = n())
     num_serv_abaixo = servidores %>% filter(CARGO == serv_cargo[1,] & REMUNERACAO < serv_remuneracao[1,]) %>% summarise(N_Servidores_Abaixo = n())
     resumo_geral = cbind(num_serv_carg, num_serv_acima, num_serv_abaixo, remun_cargo)
-    datatable(resumo_geral)
+    datatable(resumo_geral) 
   })
   
   

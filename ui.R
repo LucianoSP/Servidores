@@ -71,8 +71,10 @@ shinyUI(fluidPage(
     ),
     
     tabPanel('Servidores',
-             textInput("servidor_input", label ="Servidor a Pesquisar", value = ""),
-             DT::dataTableOutput("tab_resumo"),
+             
+             textOutput("texto"),
+             hr(),
+             DT::dataTableOutput("tab_resumo", ),
              DT::dataTableOutput("datatab_servidor")
              
              

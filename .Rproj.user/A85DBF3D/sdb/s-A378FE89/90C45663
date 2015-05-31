@@ -1,0 +1,17 @@
+{
+    "contents" : "library(ggvis)\nlibrary(shiny)\n\nshinyUI(fluidPage(\n\n  # Application title\n  \n  shinyUI(navbarPage(\n    title = 'Servidores Federais',\n    tabPanel('Sumario',\n          fluidRow(\n               column(4,\n                      sliderInput (\"min_servidores\", label = \"Número mínimo de Servidores\", 1, 2000, 1, step = 10)\n               ),\n               \n               column(4,\n                      sliderInput (\"min_remuneracao\", label = \"Remuneração Mínima:\", 1, 50000, 1, step = 1000)\n               ),\n               column(4,\n                      br(),\n                      div(style=\"color:darkblue\", h4(textOutput(\"text1\")), h4(textOutput(\"text2\")))\n               )\n             ),\n          hr(),   \n          fluidRow(\n            column(6,\n              plotOutput('plot1')\n            ),\n            \n            column(6,\n              plotOutput(\"plot7\")\n            )\n          ),\n          \n          fluidRow(\n            column(12,\n                   plotOutput('plot2')\n                   \n            )\n          )\n          \n    ),\n    \n    tabPanel('Carreira',\n        sidebarLayout(\n           sidebarPanel(\n             uiOutput(\"carr2\")\n             \n            ),\n             \n           mainPanel(\n             tabsetPanel(type = \"tabs\", \n                tabPanel(\"Todas\",\n                      \n                      DT::dataTableOutput(\"carreiras\")   \n                ), \n                \n                tabPanel(\"Comparar\",  \n                         DT::dataTableOutput(\"carreiras3\"),\n                         plotOutput('plot_comp1'),\n                         plotOutput('plot_comp2'),\n                         plotOutput('plot_comp3'),\n                         plotOutput('plot_comp4')\n                         \n                         \n                )\n                \n            )\n          )\n        )\n    ),\n    \n    tabPanel('Servidores',\n             \n             textOutput(\"texto\"),\n             hr(),\n             DT::dataTableOutput(\"tab_resumo\", ),\n             DT::dataTableOutput(\"datatab_servidor\")\n             \n             \n    ),\n    \n    tabPanel('Futuro'       )\n    \n  ))\n))\n",
+    "created" : 1433086991283.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1763992547",
+    "id" : "90C45663",
+    "lastKnownWriteTime" : 1433091190,
+    "path" : "~/GitHub/Servidores/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
