@@ -138,6 +138,16 @@ shinyServer( function(input, output, session) {
               labs(x="Estado", y="Quantidade de Servidores", title="Boxplot")
   })
   
+  output$plot_comp5 <- renderPlot({
+    if(is.null(input$carr2))
+      return()
+    servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% group_by(DESCRICAO_CARGO, ORG_EXERCICIO) %>% summarise(N=n()) %>% arrange(desc(N)) %>% top_n(10) %>%
+      ggplot(aes(ORG_EXERCICIO, N, fill = DESCRICAO_CARGO)) + 
+      geom_bar(colour = "darkblue", stat = "identity") + 
+      labs(y="Quantidade de Servidores", title="Por Órgão") +
+      coord_flip()
+  })
+  
   ####################################Servidores########################################### 
   
   name = reactive({input$datatab_servidor_rows_current})
@@ -165,4 +175,8 @@ shinyServer( function(input, output, session) {
     datatable(a, server = TRUE, filter = "top", options = list(ajax = list(url = action)))
   })
   #############################################################################   
+#   servidores %>% group_by(ORG_EXERCICIO) %>% summarise(SM = mean(REMUNERACAO_BRUTA)) %>% arrange (desc(SM)) %>% top_n(20)
+#   servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% group_by(ORG_EXERCICIO) %>% summarise(N=n()) %>% arrange(desc(N))
+#   
+  
 })

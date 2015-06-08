@@ -42,13 +42,8 @@ shinyUI(fluidPage(
     ),
     
     tabPanel('Carreira',
-        sidebarLayout(
-           sidebarPanel(
-             uiOutput("carr2")
-             
-            ),
-             
-           mainPanel(
+        
+          
              tabsetPanel(type = "tabs", 
                 tabPanel("Todas",
                       
@@ -56,18 +51,20 @@ shinyUI(fluidPage(
                 ), 
                 
                 tabPanel("Comparar",  
+                         uiOutput("carr2"),
                          DT::dataTableOutput("carreiras3"),
                          plotOutput('plot_comp1'),
                          plotOutput('plot_comp2'),
                          plotOutput('plot_comp3'),
-                         plotOutput('plot_comp4')
+                         plotOutput('plot_comp4'),
+                         plotOutput('plot_comp5')
                          
                          
                 )
                 
             )
-          )
-        )
+          
+        
     ),
     
     tabPanel('Servidores',
