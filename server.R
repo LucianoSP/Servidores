@@ -3,6 +3,10 @@ library(dplyr)
 library(data.table)
 library(DT)
 library(ggplot2)
+library(D3TableFilter)
+library(htmlwidgets)
+
+
 
 
 
@@ -97,6 +101,7 @@ shinyServer( function(input, output, session) {
   })
   
   
+  
   # TAB Comparar
   
   output$carreiras3 <- DT::renderDataTable({
@@ -179,6 +184,9 @@ shinyServer( function(input, output, session) {
     action = dataTableAjax(session, a)
     datatable(a, filter = "top", options = list(ajax = list(url = action)))
   })
+  
+  
+  
   #############################################################################   
 #   servidores %>% group_by(ORG_EXERCICIO) %>% summarise(SM = mean(REMUNERACAO_BRUTA)) %>% arrange (desc(SM)) %>% top_n(20)
 #   servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% group_by(ORG_EXERCICIO) %>% summarise(N=n()) %>% arrange(desc(N))

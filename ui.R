@@ -1,4 +1,11 @@
 library(shiny)
+library(dplyr)
+library(data.table)
+library(DT)
+library(ggplot2)
+library(D3TableFilter)
+library(htmlwidgets)
+
 
 shinyUI(fluidPage(
 
@@ -7,7 +14,8 @@ shinyUI(fluidPage(
   shinyUI(navbarPage(
     title = 'Servidores Federais',
     tabPanel('Sumario',
-          fluidRow(
+        wellPanel( 
+         fluidRow(
                column(4,
                       sliderInput ("min_servidores", label = "Número mínimo de Servidores", 1, 2000, 1, step = 10)
                ),
@@ -15,12 +23,14 @@ shinyUI(fluidPage(
                column(4,
                       sliderInput ("min_remuneracao", label = "Remuneração Mínima:", 1, 50000, 1, step = 1000)
                ),
+               
                column(4,
                       br(),
                       div(style="color:darkblue", h4(textOutput("text1")), h4(textOutput("text2")))
-               )
+               ))
              ),
-          hr(),   
+         
+             
           fluidRow(
             column(6,
               plotOutput('plot1')
@@ -46,7 +56,8 @@ shinyUI(fluidPage(
              tabsetPanel(type = "tabs", 
                 tabPanel("Todas",
                       
-                      DT::dataTableOutput("carreiras")   
+                      DT::dataTableOutput("carreiras")
+                      
                 ), 
                 
                 tabPanel("Comparar",  
@@ -72,6 +83,8 @@ shinyUI(fluidPage(
              hr(),
              DT::dataTableOutput("tab_resumo"),
              DT::dataTableOutput("datatab_servidor")
+             
+             
              
              
     ),
