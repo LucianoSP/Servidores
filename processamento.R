@@ -2,8 +2,8 @@ library(data.table)
 library(dplyr)
 
 
-remun = read.table("20150331_Remuneracao.csv", sep = "\t", header = TRUE, fill = TRUE,  quote = "", dec = ",")
-cad = read.table("20150331_Cadastro.csv", sep = "\t", header = TRUE, fill = TRUE,  quote = "")
+remun = read.table("20150331_Remuneracao.csv", sep = "\t", header = TRUE, fill = TRUE,  quote = "", dec = ",", fileEncoding = 'ISO8859-1' )
+cad = read.table("20150331_Cadastro.csv", sep = "\t", header = TRUE, fill = TRUE,  quote = "", fileEncoding = 'ISO8859-1')
 cad = cad %>% select(Id_SERVIDOR_PORTAL, NOME, DESCRICAO_CARGO, FUNCAO, ORG_LOTACAO, ORGSUP_LOTACAO, ORG_EXERCICIO, ORGSUP_EXERCICIO, SITUACAO_VINCULO, REGIME_JURIDICO, UF_EXERCICIO)
 remun = remun %>% select(ID_SERVIDOR_PORTAL, REMUNERAÇÃO.BÁSICA.BRUTA..R.., REMUNERAÇÃO.APÓS.DEDUÇÕES.OBRIGATÓRIAS..R.., TOTAL.DE.VERBAS.INDENIZATÓRIAS..R....., TOTAL.DE.HONORÁRIOS..JETONS. )
 names(remun) = c("ID", "REMUNERACAO_BRUTA", "REMUNERACAO_LIQUIDA", "VERBAS", "JETONS")
