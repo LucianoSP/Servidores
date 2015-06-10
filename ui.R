@@ -1,4 +1,3 @@
-library(ggvis)
 library(shiny)
 
 shinyUI(fluidPage(
@@ -71,7 +70,7 @@ shinyUI(fluidPage(
              
              textOutput("texto"),
              hr(),
-             DT::dataTableOutput("tab_resumo", ),
+             DT::dataTableOutput("tab_resumo"),
              DT::dataTableOutput("datatab_servidor")
              
              

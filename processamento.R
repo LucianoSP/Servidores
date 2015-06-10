@@ -28,4 +28,4 @@ servidores$JETONS = as.numeric(servidores$JETONS)
 
 
 
-saveRDS(servidores, file = "servidores.rds")
+# saveRDS(servidores, file = "servidores.rds")

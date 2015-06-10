@@ -5,11 +5,13 @@ library(DT)
 library(ggplot2)
 
 
+
+
 shinyServer( function(input, output, session) {
   
   
   # servidores = read.table("servidores2.csv", header = TRUE, sep = ";")
-  servidores <- readRDS("servidores.rds")
+  servidores <- readRDS("servidores2.rds")
   servidores$NOME = as.character(servidores$NOME)
   carreiras_populosas = servidores %>% select(DESCRICAO_CARGO) %>% group_by(DESCRICAO_CARGO) %>% summarise(n=n()) %>% 
                 arrange(desc(n)) %>% slice(1:20) %>% select(DESCRICAO_CARGO) %>% as.matrix() %>% c()
@@ -48,10 +50,10 @@ shinyServer( function(input, output, session) {
   output$plot7 <- renderPlot({
     servidores %>% filter(DESCRICAO_CARGO %in% carreiras_bem_remun(), DESCRICAO_CARGO %in% carreiras_grandes(), !is.na(DESCRICAO_CARGO)) %>% 
       group_by(DESCRICAO_CARGO) %>% 
-      summarise(N_Servidores = n(), Salario_Medio = mean(REMUNERACAO_BRUTA), Salario_Max = max(REMUNERACAO_BRUTA), Salario_Min = min(REMUNERACAO_BRUTA)) %>% 
+      summarise(N_Servidores = n(), Salario_Medio = mean(REMUNERACAO_BRUTA)) %>% 
       arrange(desc(N_Servidores)) %>% slice(1:15) %>%
-      ggplot(aes(x=reorder(DESCRICAO_CARGO, Salario_Medio), y=Salario_Medio)) + 
-      geom_bar(stat="identity", fill = "darkgreen") + 
+      ggplot(aes(x=DESCRICAO_CARGO, y=Salario_Medio, size = N_Servidores)) +
+      geom_point(colour="white", fill="red", shape=21) + scale_size_area(max_size = 20) +
       labs(x="", y="Salario Medio", title="As 15 Carreiras mais populosas") +
       coord_flip()
    
@@ -75,7 +77,7 @@ shinyServer( function(input, output, session) {
   #####################################CARREIRAS##########################################  
   
   REMUN_TOTAL = sum(servidores$REMUNERACAO_BRUTA)
-  CARGOS = servidores %>% select(DESCRICAO_CARGO) %>% distinct() %>% arrange(desc(DESCRICAO_CARGO)) %>% as.matrix() %>% c()
+  CARGOS = enc2utf8(servidores %>% select(DESCRICAO_CARGO) %>% distinct() %>% arrange(desc(DESCRICAO_CARGO)) %>% as.matrix() %>% c())
   
   # Sidepanel
   output$carr1 <- renderUI({
@@ -94,9 +96,6 @@ shinyServer( function(input, output, session) {
       arrange(desc(Salario_Medio))) 
   })
   
-  # TAB Específica
-  
-  
   
   # TAB Comparar
   
@@ -109,6 +108,8 @@ shinyServer( function(input, output, session) {
   })
   
   output$plot_comp1 <- renderPlot({
+    if(is.null(input$carr2))
+      return()
     servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% 
       ggplot(aes(REMUNERACAO_BRUTA, fill = DESCRICAO_CARGO)) + 
       geom_histogram(alpha=.8, position="dodge") + 
@@ -116,6 +117,8 @@ shinyServer( function(input, output, session) {
   })
   
   output$plot_comp2 <- renderPlot({
+    if(is.null(input$carr2))
+      return()
     servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% 
       ggplot(aes(REMUNERACAO_BRUTA, fill = DESCRICAO_CARGO)) + 
       geom_density(alpha=0.2) + 
@@ -123,6 +126,8 @@ shinyServer( function(input, output, session) {
   })
   
   output$plot_comp3 <- renderPlot({
+    if(is.null(input$carr2))
+      return()
     servidores %>% filter(DESCRICAO_CARGO %in% input$carr2) %>% group_by(DESCRICAO_CARGO, UF_EXERCICIO) %>% summarise(TOTAL=n()) %>%
       ggplot(aes(UF_EXERCICIO, TOTAL, fill = DESCRICAO_CARGO)) + 
       geom_bar(stat = "identity", alpha=.8, position="dodge") +
@@ -170,9 +175,9 @@ shinyServer( function(input, output, session) {
   
   
   output$datatab_servidor <- DT::renderDataTable({
-    a = servidores %>% select(-ID)
+    a = servidores %>% select(NOME, DESCRICAO_CARGO, FUNCAO, ORG_EXERCICIO, UF_EXERCICIO, SITUACAO_VINCULO, REMUNERACAO_BRUTA, VERBAS, JETONS) 
     action = dataTableAjax(session, a)
-    datatable(a, server = TRUE, filter = "top", options = list(ajax = list(url = action)))
+    datatable(a, filter = "top", options = list(ajax = list(url = action)))
   })
   #############################################################################   
 #   servidores %>% group_by(ORG_EXERCICIO) %>% summarise(SM = mean(REMUNERACAO_BRUTA)) %>% arrange (desc(SM)) %>% top_n(20)
