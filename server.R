@@ -3,12 +3,6 @@ library(dplyr)
 library(data.table)
 library(DT)
 library(ggplot2)
-library(D3TableFilter)
-library(htmlwidgets)
-
-
-
-
 
 
 shinyServer( function(input, output, session) {

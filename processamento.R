@@ -15,7 +15,6 @@ funcao = cad %>% select(ID, FUNCAO)
 funcao = funcao %>% distinct() %>% filter(FUNCAO != "")
 desc_cargo = desc_cargo %>% distinct() %>% filter(DESCRICAO_CARGO != "")
 
-
 servidores = cad %>% select(-DESCRICAO_CARGO, -FUNCAO)
 servidores = servidores %>% distinct()
 servidores = left_join(servidores, desc_cargo, by="ID")
@@ -26,6 +25,4 @@ servidores$REMUNERACAO_LIQUIDA = as.numeric(servidores$REMUNERACAO_LIQUIDA)
 servidores$VERBAS = as.numeric(servidores$VERBAS)
 servidores$JETONS = as.numeric(servidores$JETONS)
 
-
-
-# saveRDS(servidores, file = "servidores.rds")
+saveRDS(servidores, file = "servidores2.rds")
